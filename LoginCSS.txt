@@ -1,0 +1,73 @@
+/* Styles for the main container */
+#container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #fff;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Styles for the left blue box */
+  #left-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #003670;
+    color: #fff;
+    min-height: 100vh;
+    max-width: 60vh;
+  }
+  
+  #left-box img {
+    width: 250px;
+    height: auto;
+  }
+  
+  #left-box h4 {
+    font-weight: 600;
+  }
+  
+  /* Styles for the right login form */
+  #right-box {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    padding: 40px;
+  }
+  
+  #right-box img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 25px;
+  }
+  
+  #right-box h1 {
+    font-size: 2rem;
+  }
+  
+  #right-box p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+  }
+  
+  form {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  form .MuiButton-containedPrimary {
+    margin-top: 20px;
+    background-color: #003670;
+  }
+  
+  /* Error message styles */
+  .error-message {
+    color: red;
+    font-size: 0.875rem;
+  }
+  
