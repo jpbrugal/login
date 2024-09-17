@@ -1,0 +1,118 @@
+import React, { useState, useEffect } from "react";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import useApi from "../../api/api"; // Import the custom hook
+import './Login.css';
+
+interface LoginResponse {
+  token: {
+    token: string;
+    refreshToken: string;
+    expireToken: string;
+    result: boolean;
+    message: string;
+  };
+  data: {
+    id: string;
+    full_name: string;
+    email: string;
+    department_name: string;
+    rol: string;
+    app_name: string;
+  };
+}
+
+const LoginPage: React.FC = () => {
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
+
+  const application_id = 10;
+
+  // Call the useApi hook for the login endpoint with the expected response type
+  const { data, loading, error: apiError, refetch } = useApi<LoginResponse>(
+    'POST',
+    '/authentication',  
+    undefined,
+    { username, password, application_id }
+  );
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault(); 
+
+
+    if (loading) {
+      return; 
+    }
+
+    refetch(); 
+  };
+
+  useEffect(() => {
+    if (data) {
+      const { token, data: userData } = data;
+      localStorage.setItem("token", token.token); // Store the token
+      localStorage.setItem("user", JSON.stringify(userData)); // Store user data
+
+      // Redirect to home page or another route
+      window.location.href = "/";  // You can change this to the appropriate route
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (apiError) {
+      setError("Invalid username or password. Please try again.");
+    }
+  }, [apiError]);
+
+  return (
+    <Box id="container">
+      {/* Left Blue Box */}
+      <Box id="left-box">
+        <img src="\src\assets\images\ LOGO_GOB_vert_blanco.svg" alt="Logo" />
+        <h4>Seguridad Vanguard</h4>
+      </Box>
+
+      {/* Right Login Form */}
+      <Box id="right-box">
+        <img src="src\assets\images\ LOGO_GOB_cupula_azul.svg" alt="Cupula" />
+        <h1>Iniciar Sesión</h1>
+        <p>Inicia sesión para poder tener acceso al sistema.</p>
+        <form onSubmit={handleLogin}>
+          <TextField
+            fullWidth
+            label="Usuario"
+            variant="outlined"
+            margin="normal"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <TextField
+            fullWidth
+            label="Contraseña"
+            type="password"
+            variant="outlined"
+            margin="normal"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          {error && (
+            <Typography className="error-message" variant="body2">
+              {error}
+            </Typography>
+          )}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={loading} // Disable button while loading
+          >
+            {loading ? "Loading..." : "LOGIN"}
+          </Button>
+        </form>
+      </Box>
+    </Box>
+  );
+};
+
+export default LoginPage;
